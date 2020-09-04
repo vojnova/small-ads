@@ -1,0 +1,63 @@
+<!--<form nz-form [formGroup]="createForm" (ngSubmit)="submit()">-->
+
+<!--  <nz-form-item>-->
+<!--    <nz-form-label>Заглавие:</nz-form-label>-->
+<!--    <nz-form-control>-->
+<!--      <input type="text" formControlName="title">-->
+<!--    </nz-form-control>-->
+<!--  </nz-form-item>-->
+
+<!--  <nz-form-item>-->
+<!--    <nz-form-label>Описание:</nz-form-label>-->
+<!--    <nz-form-control>-->
+<!--      <input type="text" formControlName="description">-->
+<!--    </nz-form-control>-->
+<!--  </nz-form-item>-->
+
+<!--  <nz-form-item>-->
+<!--    <nz-form-label>Цена:</nz-form-label>-->
+<!--    <nz-form-control>-->
+<!--      <input type="number" formControlName="price">-->
+<!--    </nz-form-control>-->
+<!--  </nz-form-item>-->
+<!--  -->
+<!--  <button type="submit">Add</button>-->
+<!--</form>-->
+<h1>Добавяне на нова обява</h1>
+
+<form nz-form [formGroup]="createForm" (ngSubmit)="submit()">
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="title">Заглавие:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Заглавието е задължително!">
+      <input nz-input formControlName="title" id="title" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description" nzRequired>Описание:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Описанието е задължително!">
+      <textarea nz-input id="description" formControlName="description" rows="5"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="price" nzRequired>Цена:</nz-form-label>
+    <nz-form-control
+      [nzSm]="14"
+      [nzXs]="24"
+      nzErrorTip="Отбележете цена!"
+    >
+      <nz-input-group [nzAddOnAfter]="'лв.'">
+        <input formControlName="price" id="'price'" nz-input />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-row class="register-area">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary">Добавяне</button>
+    </nz-form-control>
+  </nz-form-item>
+
+</form>

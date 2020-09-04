@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "small-ads-app": {
+      "hosting": {
+        "small-ads": [
+          "small-ads-app"
+        ]
+      }
+    }
+  }
+}

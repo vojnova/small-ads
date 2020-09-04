@@ -1,0 +1,20 @@
+<nz-card [nzActions]="[showPhone, actionEdit, actionDelete]">
+
+  <nz-card-meta
+    nzTitle="{{ad.title}}"
+    nzDescription="{{ad.description}}"
+  ></nz-card-meta>
+
+  <nz-card-meta nzTitle="Цена: {{ad.price}} лв.">
+  </nz-card-meta>
+</nz-card>
+
+<ng-template #showPhone>
+  <i nz-icon nzType="setting"></i>
+</ng-template>
+<ng-template #actionEdit>
+  <i nz-icon nzType="edit"></i>
+</ng-template>
+<ng-template #actionDelete>
+  <i nz-icon nzType="delete"></i>
+</ng-template>
