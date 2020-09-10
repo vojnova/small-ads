@@ -27,12 +27,34 @@
       </li>
       <li nz-submenu nzOpen nzTitle="Опции" nzIcon="form">
         <ul>
+          <ng-template [ngIf]="authService.currentUser">
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/ads/create">
               <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
               Добавяне на обява
             </a>
           </li>
+          <li nz-menu-item nzMatchRouter>
+            <a (click)="authService.logout()">
+              <i nz-icon nzType="logout" nzTheme="outline"></i>
+              Изход
+            </a>
+          </li>
+          </ng-template>
+          <ng-template [ngIf]="!authService.currentUser">
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/auth/login">
+                <i nz-icon nzType="login" nzTheme="outline"></i>
+                Вход
+              </a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/auth/register">
+                <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
+                Регистрация
+              </a>
+            </li>
+          </ng-template>
         </ul>
       </li>
     </ul>

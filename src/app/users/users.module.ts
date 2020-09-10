@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserPageComponent } from './user-page/user-page.component';
+import { UsersListPageComponent } from './users-list-page/users-list-page.component';
 import {RouterModule} from '@angular/router';
+import { UserComponent } from './user/user.component';
+import {AntDesignModule} from '../ant-design/ant-design.module';
 
 const routes = [
-  {path: '', component: UserPageComponent}
+  {path: '', component: UsersListPageComponent}
 ];
 
 @NgModule({
-  declarations: [UserPageComponent],
+  declarations: [UsersListPageComponent, UserComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AntDesignModule
   ]
 })
 export class UsersModule { }

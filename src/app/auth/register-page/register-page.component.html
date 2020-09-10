@@ -1,0 +1,59 @@
+<form nz-form [formGroup]="registerForm" (ngSubmit)="submit()">
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Email:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Въведете своята електронна поща!">
+      <input nz-input formControlName="email" id="email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Име:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Името е задължително!">
+      <input nz-input formControlName="name" id="name" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="city">Град:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="city" id="city" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone">Телефон:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="phone" id="phone" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Парола:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Моля, въведете парола!">
+      <input nz-input type="password" id="password" formControlName="password" (ngModelChange)="updateConfirmValidator()" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>Повторете паролата:</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+      <input nz-input type="password" formControlName="checkPassword" id="checkPassword" />
+      <ng-template #errorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          Моля, потвърдете паролата!
+        </ng-container>
+        <ng-container *ngIf="control.hasError('confirm')">
+          Паролите не съвпадат!
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-row class="register-area">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary">Регистрация</button>
+    </nz-form-control>
+  </nz-form-item>
+
+</form>

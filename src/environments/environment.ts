@@ -5,14 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: '<your-api-key>',
-    authDomain: '<your-auth-domain>',
-    databaseURL: '<your-database-url>',
-    projectId: '<your-project-id>',
-    storageBucket: '<your-storage-bucket>',
-    messagingSenderId: '<your-messaging-sender-id>',
-    appId: '<your-app-id>',
-    measurementId: '<your-measurement-id>'
+    apiKey: 'AIzaSyBCQbAHaD5qJ_9gP8ecTUnfV4QHkBcw7Mg',
+    authDomain: 'small-ads-app.firebaseapp.com',
+    databaseURL: 'https://small-ads-app.firebaseio.com',
+    projectId: 'small-ads-app',
+    storageBucket: 'small-ads-app.appspot.com',
+    messagingSenderId: '840974913108',
+    appId: '1:840974913108:web:c1f70029517e1b2eb7e7c1'
   }
 };
 

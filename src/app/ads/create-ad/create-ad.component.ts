@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
+import {AuthService} from '../../auth/auth.service';
 
 @Component({
   selector: 'app-create-ad',
@@ -11,14 +12,15 @@ import {Router} from '@angular/router';
 export class CreateAdComponent implements OnInit {
   createForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private firestore: AngularFirestore, private router: Router) {
+  constructor(private fb: FormBuilder, private firestore: AngularFirestore,
+              private router: Router, private authService: AuthService) {
     this.createForm = fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
       price: 0,
       date: Date.now(),
       active: true,
-      owner: null
+      owner: authService.currentUser.id
       }
     );
   }

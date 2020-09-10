@@ -8,7 +8,8 @@ const MODULES = [
   NzGridModule,
   NzFormModule,
   NzInputModule,
-  NzButtonModule
+  NzButtonModule,
+  NzInputModule
 ];
 
 @NgModule({

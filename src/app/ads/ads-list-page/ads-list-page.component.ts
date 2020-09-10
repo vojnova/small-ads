@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Ad} from '../../models/Ad';
+import {FirestoreService} from '../../firestore/firestore.service';
 
 @Component({
   selector: 'app-ads-list-page',
@@ -9,12 +10,10 @@ import {Ad} from '../../models/Ad';
   styleUrls: ['./ads-list-page.component.scss']
 })
 export class AdsListPageComponent implements OnInit {
-  ads$: Observable<Ad[]>;
   ads: Ad[];
 
-  constructor(firestore: AngularFirestore) {
-    this.ads$ = firestore.collection<Ad>('ads').valueChanges();
-    this.ads$.subscribe(data => {this.ads = data; console.log(data); });
+  constructor(firestore: FirestoreService) {
+    firestore.getAds().subscribe(data => this.ads = data);
   }
 
   ngOnInit(): void {

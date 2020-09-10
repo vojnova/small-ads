@@ -1,0 +1,25 @@
+<nz-card> <!--[nzActions]="[showPhone, actionEdit, actionDelete]"-->
+
+  <nz-card-meta
+    nzTitle="{{user.name}}"
+    nzDescription="{{user.email}}"
+  ></nz-card-meta>
+
+  <nz-card-meta nzTitle="Град: {{user.city}}">
+  </nz-card-meta>
+
+  <nz-card-meta nzTitle="Телефон: {{user.phone}}">
+  </nz-card-meta>
+</nz-card>
+
+<ng-template [ngIf]="authService.currentUser">
+<ng-template #showPhone>
+  <i nz-icon nzType="setting"></i>
+</ng-template>
+<ng-template #actionEdit>
+  <i nz-icon nzType="edit"></i>
+</ng-template>
+<ng-template #actionDelete>
+  <i nz-icon nzType="delete"></i>
+</ng-template>
+</ng-template>
