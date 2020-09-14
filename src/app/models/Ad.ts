@@ -6,6 +6,6 @@ export interface Ad {
   description: string;
   price: number;
   date: string;
-  owner: User;
+  owner?: string | User;
   active: boolean;
 }

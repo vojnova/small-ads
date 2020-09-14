@@ -12,17 +12,15 @@ export class UsersListPageComponent implements OnInit {
 
   public users: User[];
 
-  constructor(private firestore: FirestoreService) {
-    // firestore.collection<User>('users').valueChanges()
-    //   .subscribe(data => this.users = data);
-    // firestore.collection<User>('users').snapshotChanges().subscribe(data => {
-    //   for (const doc of data){
-    //     const id = doc.payload.doc.id;
-    //     const user = doc.payload.doc.data();
-    //     this.users.push({...user, id});
-    //   }
-    // });
-    this.users = firestore.users;
+  constructor(private firestore: AngularFirestore) {
+    this.firestore.collection<User>('users').snapshotChanges().subscribe(data => {
+      this.users = [];
+      for (const doc of data){
+        const id = doc.payload.doc.id;
+        const user = doc.payload.doc.data();
+        this.users.push({id, ...user});
+      }
+    });
   }
 
   ngOnInit(): void { }

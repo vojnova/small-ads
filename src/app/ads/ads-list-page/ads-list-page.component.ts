@@ -12,8 +12,15 @@ import {FirestoreService} from '../../firestore/firestore.service';
 export class AdsListPageComponent implements OnInit {
   ads: Ad[];
 
-  constructor(firestore: FirestoreService) {
-    firestore.getAds().subscribe(data => this.ads = data);
+  constructor(private firestore: AngularFirestore) {
+    this.firestore.collection<Ad>('ads').snapshotChanges().subscribe(data => {
+      this.ads = [];
+      for (const doc of data){
+        const id = doc.payload.doc.id;
+        const ad = doc.payload.doc.data();
+        this.ads.push({...ad, id});
+      }
+    });
   }
 
   ngOnInit(): void {

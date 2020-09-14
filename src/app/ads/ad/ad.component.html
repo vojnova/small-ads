@@ -1,4 +1,4 @@
-<nz-card [nzActions]="[showPhone, actionEdit, actionDelete]">
+<nz-card [nzActions]="authService.currentUser && (authService.currentUser.id == ad.owner || authService.currentUser.isAdmin) ? [showPhone, actionEdit, actionDelete] : []">
 
   <nz-card-meta
     nzTitle="{{ad.title}}"
@@ -7,14 +7,18 @@
 
   <nz-card-meta nzTitle="Цена: {{ad.price}} лв.">
   </nz-card-meta>
+
+  <nz-card-meta *ngIf="owner" nzDescription="Потребител: {{owner.name}}">{{owner.name}}</nz-card-meta>
+
+  <nz-card-meta *ngIf="authService.currentUser && owner" nzDescription="Телефон: {{owner.phone}}"></nz-card-meta>
 </nz-card>
 
 <ng-template #showPhone>
   <i nz-icon nzType="setting"></i>
 </ng-template>
 <ng-template #actionEdit>
-  <i nz-icon nzType="edit"></i>
+  <i nz-icon nzType="edit" (click)="edit()"></i>
 </ng-template>
 <ng-template #actionDelete>
-  <i nz-icon nzType="delete"></i>
+  <i nz-icon nzType="delete" (click)="delete()"></i>
 </ng-template>

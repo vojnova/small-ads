@@ -10,6 +10,7 @@ import {UserGuard} from '../auth/user.guard';
 
 const routes = [
   {path: '', component: AdsListPageComponent},
+  {path: ':id', component: CreateAdComponent, canActivate: [UserGuard]},
   {path: 'create', component: CreateAdComponent, canActivate: [UserGuard]}
 ];
 

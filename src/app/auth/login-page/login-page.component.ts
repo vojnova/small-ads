@@ -34,8 +34,8 @@ export class LoginPageComponent implements OnInit {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
       const user = this.loginForm.value;
-      const found = this.users.find(u => u.email = user.email);
-      if (!found || found && found.password !== user.password){
+      const found = this.users.find(u => u.email === user.email);
+      if (!found || (found && found.password !== user.password)){
         console.log('Auth failed!');
       }
       else {
