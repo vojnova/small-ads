@@ -15,16 +15,22 @@ import {FirestoreService} from '../../firestore/firestore.service';
 })
 export class LoginPageComponent implements OnInit {
 
-  private users: User[];
+  private users: User[] = [];
   public loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private firestore: FirestoreService,
+  constructor(private fb: FormBuilder, private firestore: AngularFirestore,
               private router: Router, private authService: AuthService) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
-    this.users = firestore.users;
+    this.firestore.collection<User>('users').snapshotChanges().subscribe(data => {
+      for (const doc of data){
+        const id = doc.payload.doc.id;
+        const user = doc.payload.doc.data();
+        this.users.push({id, ...user});
+      }
+    });
   }
 
   ngOnInit(): void {

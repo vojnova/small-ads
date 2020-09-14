@@ -1,6 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {NzButtonModule, NzCardModule, NzFormModule, NzGridModule, NzIconModule, NzInputModule, NzToolTipModule} from 'ng-zorro-antd';
+import {
+  NzButtonModule,
+  NzCardModule,
+  NzCommentModule,
+  NzFormModule,
+  NzGridModule,
+  NzIconModule,
+  NzInputModule, NzTabsModule,
+  NzToolTipModule
+} from 'ng-zorro-antd';
 
 const MODULES = [
   NzCardModule,
@@ -9,7 +18,9 @@ const MODULES = [
   NzFormModule,
   NzInputModule,
   NzButtonModule,
-  NzInputModule
+  NzInputModule,
+  NzCommentModule,
+  NzTabsModule
 ];
 
 @NgModule({

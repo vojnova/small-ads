@@ -1,20 +1,39 @@
-<nz-card [nzActions]="authService.currentUser && (authService.currentUser.id == ad.owner || authService.currentUser.isAdmin) ? [showPhone, actionEdit, actionDelete] : []">
+<nz-card [nzActions]="authService.currentUser ?
+(authService.currentUser.id == ad.owner || authService.currentUser.isAdmin ?
+[actionAsk, actionEdit, actionDelete] : [actionAsk]) : []">
+  <nz-card-tab>
+    <nz-tabset>
+      <nz-tab nzTitle="Описание">
+        <h3>{{ad.title}}</h3>
+        <p>{{ad.description}}</p>
+        <h3>Цена: {{ad.price}} лв.</h3>
+        <div *ngIf="owner">
+        <p>Потребител: {{owner.name}}</p>
+        <p *ngIf="authService.currentUser">Телефон: {{owner.phone}}</p>
+        </div>
+      </nz-tab>
 
-  <nz-card-meta
-    nzTitle="{{ad.title}}"
-    nzDescription="{{ad.description}}"
-  ></nz-card-meta>
-
-  <nz-card-meta nzTitle="Цена: {{ad.price}} лв.">
-  </nz-card-meta>
-
-  <nz-card-meta *ngIf="owner" nzDescription="Потребител: {{owner.name}}">{{owner.name}}</nz-card-meta>
-
-  <nz-card-meta *ngIf="authService.currentUser && owner" nzDescription="Телефон: {{owner.phone}}"></nz-card-meta>
+      <nz-tab nzTitle="Въпроси">
+        <div *ngIf="questions">
+          <nz-comment *ngFor="let question of questions" nzAuthor="{{question.from.name}}">
+            <nz-comment-content>
+              <p>{{ question.content }}</p>
+            </nz-comment-content>
+            <nz-comment-action>Отговор</nz-comment-action>
+            <nz-comment *ngIf="question.answer">
+              {{question.answer}}
+            </nz-comment>
+          </nz-comment>
+        </div>
+        <div *ngIf="!questions || !questions.length">Няма въпроси.</div>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card-tab>
+  <input *ngIf="authService.currentUser" type="text" [formControl]="askInput" nz-input placeholder="Напишете въпрос...">
 </nz-card>
 
-<ng-template #showPhone>
-  <i nz-icon nzType="setting"></i>
+<ng-template #actionAsk>
+  <i nz-icon nzType="question" (click)="ask()"></i>
 </ng-template>
 <ng-template #actionEdit>
   <i nz-icon nzType="edit" (click)="edit()"></i>

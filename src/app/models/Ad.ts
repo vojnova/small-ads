@@ -1,4 +1,5 @@
 import {User} from './User';
+import {Question} from './Question';
 
 export interface Ad {
   id?: string;
@@ -8,4 +9,5 @@ export interface Ad {
   date: string;
   owner?: string | User;
   active: boolean;
+  questions?: string[] | Question[];
 }

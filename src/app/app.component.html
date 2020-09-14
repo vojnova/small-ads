@@ -34,6 +34,12 @@
               Добавяне на обява
             </a>
           </li>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/auth/edit">
+                <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
+                Редактиране на профил
+              </a>
+            </li>
           <li nz-menu-item nzMatchRouter>
             <a (click)="authService.logout()">
               <i nz-icon nzType="logout" nzTheme="outline"></i>

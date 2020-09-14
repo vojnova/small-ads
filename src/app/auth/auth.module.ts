@@ -5,11 +5,13 @@ import { RegisterPageComponent } from './register-page/register-page.component';
 import {AntDesignModule} from '../ant-design/ant-design.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {UserGuard} from './user.guard';
 
 const routes = [
   {path: '', pathMatch: 'full', redirectTo: '/login'},
   {path: 'login', component: LoginPageComponent},
-  {path: 'register', component: RegisterPageComponent}
+  {path: 'register', component: RegisterPageComponent},
+  {path: ':edit', component: RegisterPageComponent, canActivate: [UserGuard]}
 ];
 
 @NgModule({

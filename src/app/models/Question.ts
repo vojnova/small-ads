@@ -4,6 +4,7 @@ import {Ad} from './Ad';
 export interface Question {
   content: string;
   date: string;
-  from: User;
+  from: string | User;
   ad: Ad;
+  answer: string;
 }
