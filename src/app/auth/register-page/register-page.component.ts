@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-register-page',
@@ -12,7 +13,8 @@ export class RegisterPageComponent implements OnInit {
 
   public registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private firestore: AngularFirestore, private router: Router) {
+  constructor(private fb: FormBuilder, private firestore: AngularFirestore,
+              private router: Router, private fireauth: AngularFireAuth) {
     this.registerForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
@@ -47,6 +49,8 @@ export class RegisterPageComponent implements OnInit {
       const user = this.registerForm.value;
       delete user.checkPassword;
       this.firestore.collection('users').add(user);
+      this.fireauth.createUserWithEmailAndPassword(user.email, user.password)
+        .catch(error => console.log(error.code + error.message));
       this.router.navigateByUrl('auth/login');
     }
   }

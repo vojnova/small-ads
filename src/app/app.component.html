@@ -27,7 +27,7 @@
       </li>
       <li nz-submenu nzOpen nzTitle="Опции" nzIcon="form">
         <ul>
-          <ng-template [ngIf]="authService.currentUser">
+          <ng-template [ngIf]="fireauth.user | async">
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/ads/create">
               <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
@@ -41,13 +41,13 @@
               </a>
             </li>
           <li nz-menu-item nzMatchRouter>
-            <a (click)="authService.logout()">
+            <a (click)="fireauth.signOut()">
               <i nz-icon nzType="logout" nzTheme="outline"></i>
               Изход
             </a>
           </li>
           </ng-template>
-          <ng-template [ngIf]="!authService.currentUser">
+          <ng-template [ngIf]="!(fireauth.user | async)">
             <li nz-menu-item nzMatchRouter>
               <a routerLink="/auth/login">
                 <i nz-icon nzType="login" nzTheme="outline"></i>

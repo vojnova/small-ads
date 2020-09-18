@@ -7,6 +7,7 @@ import {User} from '../../models/User';
 import {Observable} from 'rxjs';
 import {AuthService} from '../auth.service';
 import {FirestoreService} from '../../firestore/firestore.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login-page',
@@ -19,7 +20,8 @@ export class LoginPageComponent implements OnInit {
   public loginForm: FormGroup;
 
   constructor(private fb: FormBuilder, private firestore: AngularFirestore,
-              private router: Router, private authService: AuthService) {
+              private router: Router, private authService: AuthService,
+              private fireauth: AngularFireAuth) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -40,15 +42,17 @@ export class LoginPageComponent implements OnInit {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
       const user = this.loginForm.value;
-      const found = this.users.find(u => u.email === user.email);
-      if (!found || (found && found.password !== user.password)){
-        console.log('Auth failed!');
-      }
-      else {
-        console.log('Auth success!');
-        this.authService.login(found);
-        this.router.navigateByUrl('/ads');
-      }
+      this.fireauth.signInWithEmailAndPassword(user.email, user.password)
+        .catch( error => console.log(error.code + error.message));
+      // const found = this.users.find(u => u.email === user.email);
+      // if (!found || (found && found.password !== user.password)){
+      //   console.log('Auth failed!');
+      // }
+      // else {
+      //   console.log('Auth success!');
+      //   this.authService.login(found);
+      //   this.router.navigateByUrl('/ads');
+      // }
     }
   }
 
