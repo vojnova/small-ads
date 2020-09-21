@@ -43,7 +43,12 @@ export class LoginPageComponent implements OnInit {
       console.log(this.loginForm.value);
       const user = this.loginForm.value;
       this.fireauth.signInWithEmailAndPassword(user.email, user.password)
-        .catch( error => console.log(error.code + error.message));
+        .catch( error => console.log(error.code + error.message))
+        .then(res => {
+          // @ts-ignore
+          const id = res.user.uid;
+          // this.authService.login(id);
+        });
       // const found = this.users.find(u => u.email === user.email);
       // if (!found || (found && found.password !== user.password)){
       //   console.log('Auth failed!');

@@ -41,7 +41,7 @@
               </a>
             </li>
           <li nz-menu-item nzMatchRouter>
-            <a (click)="fireauth.signOut()">
+            <a (click)="authService.logout()">
               <i nz-icon nzType="logout" nzTheme="outline"></i>
               Изход
             </a>
@@ -74,6 +74,7 @@
                [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
             ></i>
         </span>
+        <b *ngIf="authService.currentUser">Привет, {{authService.currentUser.name}}!</b>
       </div>
     </nz-header>
     <nz-content>
