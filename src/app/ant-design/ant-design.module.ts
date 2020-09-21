@@ -7,7 +7,7 @@ import {
   NzFormModule,
   NzGridModule,
   NzIconModule,
-  NzInputModule, NzTabsModule,
+  NzInputModule, NzMessageModule, NzTabsModule,
   NzToolTipModule
 } from 'ng-zorro-antd';
 
@@ -20,7 +20,8 @@ const MODULES = [
   NzButtonModule,
   NzInputModule,
   NzCommentModule,
-  NzTabsModule
+  NzTabsModule,
+  NzMessageModule,
 ];
 
 @NgModule({

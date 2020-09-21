@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../auth/auth.service';
 import {FirestoreService} from '../../firestore/firestore.service';
 import {Ad} from '../../models/Ad';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-create-ad',
@@ -19,7 +20,7 @@ export class CreateAdComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private firestore: AngularFirestore,
               private router: Router, private authService: AuthService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute, private message: NzMessageService) {
     activatedRoute.paramMap.subscribe(params => {
       if (params.get('id')){
         this.isEditing = true;
@@ -53,15 +54,26 @@ export class CreateAdComponent implements OnInit {
 
   submit(){
     if (this.createForm.valid){
-      console.log(this.createForm.value);
+      const messageId = this.message.loading('Обработва се...').messageId;
       if (this.isEditing) {
         this.firestore.doc('ads/' + this.id).update(this.createForm.value)
-          .then(data => this.router.navigateByUrl('/ads'));
+          .then(data => {
+            this.message.remove(messageId);
+            this.message.success('Редактирането е успешно!');
+            this.router.navigateByUrl('/ads');
+          });
       }
       else {
         this.firestore.collection('ads').add(this.createForm.value)
-          .then(data => this.router.navigateByUrl('/ads'));
+          .then(data => {
+            this.message.remove(messageId);
+            this.message.success('Обявата е добавена успешно!');
+            this.router.navigateByUrl('/ads');
+          });
       }
+    }
+    else {
+      this.message.warning('Има невалидни полета!');
     }
   }
 

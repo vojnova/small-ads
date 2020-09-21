@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {Question} from '../../models/Question';
 import {FormControl, Validators} from '@angular/forms';
 import * as firebase from 'firebase';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-ad',
@@ -20,7 +21,7 @@ export class AdComponent implements OnInit {
   public askInput = new FormControl('');
 
   constructor(private firestore: AngularFirestore, public authService: AuthService,
-              private router: Router) {  }
+              private router: Router, private message: NzMessageService) {  }
 
   ngOnInit(): void {
     if (this.ad.owner){
@@ -40,7 +41,11 @@ export class AdComponent implements OnInit {
   }
 
   delete() {
-    this.firestore.doc('ads/' + this.ad.id).delete().then(data => this.router.navigateByUrl('/ads'));
+    this.firestore.doc('ads/' + this.ad.id).delete()
+      .then(data => {
+        this.message.success('Обявата беше изтрита!');
+        this.router.navigateByUrl('/ads');
+      });
   }
 
   edit() {
@@ -48,18 +53,31 @@ export class AdComponent implements OnInit {
   }
 
   ask() {
+    const messageId = this.message.loading('Обработва се...').messageId;
     const content = this.askInput.value;
     const from = this.authService.currentUserId;
     const date = Date.now();
     const ad = this.ad.id;
-    this.firestore.collection('questions').add({content, from, date, ad})
-      .then(question => {
-        const id = question.id;
-        this.firestore.doc('ads/' + this.ad.id).update({
-          questions: firebase.firestore.FieldValue.arrayUnion(id)
+    if (content) {
+      this.firestore.collection('questions').add({content, from, date, ad})
+        .catch(error => {
+          this.message.remove(messageId);
+          this.message.error('Въпросът не можа да се добави!');
+        })
+        .then(question => {
+          // @ts-ignore
+          const id = question.id;
+          this.firestore.doc('ads/' + this.ad.id).update({
+            questions: firebase.firestore.FieldValue.arrayUnion(id)
+          });
+          this.message.remove(messageId);
+          this.message.success('Въпросът е добавен успешно!');
+          this.router.navigateByUrl('/ads');
         });
-        this.router.navigateByUrl('/ads');
-      });
-    this.askInput.setValue('');
+      this.askInput.setValue('');
+    }
+    else {
+      this.message.warning('Не може да оставите полето празно!');
+    }
   }
 }

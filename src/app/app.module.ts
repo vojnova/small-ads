@@ -16,6 +16,7 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { bg_BG } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import bg from '@angular/common/locales/bg';
+import {NgZorroAntdModule, NzMessageServiceModule} from 'ng-zorro-antd';
 
 registerLocaleData(bg);
 
@@ -33,7 +34,8 @@ registerLocaleData(bg);
     NzMenuModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NzMessageServiceModule
   ],
   providers: [{ provide: NZ_I18N, useValue: bg_BG }],
   bootstrap: [AppComponent]

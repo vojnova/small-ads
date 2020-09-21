@@ -26,10 +26,10 @@
           </nz-comment>
         </div>
         <div *ngIf="!questions || !questions.length">Няма въпроси.</div>
+        <input *ngIf="authService.currentUser" type="text" [formControl]="askInput" nz-input placeholder="Напишете въпрос...">
       </nz-tab>
     </nz-tabset>
   </nz-card-tab>
-  <input *ngIf="authService.currentUser" type="text" [formControl]="askInput" nz-input placeholder="Напишете въпрос...">
 </nz-card>
 
 <ng-template #actionAsk>
