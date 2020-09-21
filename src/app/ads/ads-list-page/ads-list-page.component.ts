@@ -20,7 +20,6 @@ export class AdsListPageComponent implements OnInit {
         const ad = doc.payload.doc.data();
         this.ads.push({...ad, id});
       }
-      console.log(this.ads);
     });
   }
 

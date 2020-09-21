@@ -17,12 +17,10 @@ export class AuthService {
               private fireauth: AngularFireAuth) {  }
 
   login(userId: string) {
-    console.log('in authService');
     this.currentUserId = userId;
     this.firestore.doc<User>('users/' + userId).valueChanges()
       .subscribe(user => {
         this.currentUser = user;
-        console.log(user);
         if (user) {
           this.router.navigateByUrl('/ads');
         }

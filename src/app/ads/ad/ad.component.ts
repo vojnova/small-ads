@@ -6,6 +6,7 @@ import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
 import {Question} from '../../models/Question';
 import {FormControl, Validators} from '@angular/forms';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-ad',
@@ -48,11 +49,17 @@ export class AdComponent implements OnInit {
 
   ask() {
     const content = this.askInput.value;
-    const from = this.authService.currentUser.id;
+    const from = this.authService.currentUserId;
     const date = Date.now();
     const ad = this.ad.id;
     this.firestore.collection('questions').add({content, from, date, ad})
-      .then(data => this.router.navigateByUrl('/ads'));
+      .then(question => {
+        const id = question.id;
+        this.firestore.doc('ads/' + this.ad.id).update({
+          questions: firebase.firestore.FieldValue.arrayUnion(id)
+        });
+        this.router.navigateByUrl('/ads');
+      });
     this.askInput.setValue('');
   }
 }

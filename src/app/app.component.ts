@@ -11,7 +11,6 @@ export class AppComponent {
   isCollapsed = false;
 
   constructor(public authService: AuthService, public fireauth: AngularFireAuth) {
-    console.log(fireauth.user);
     fireauth.user.subscribe(user => {
       if (user){
         authService.login(user.uid);
