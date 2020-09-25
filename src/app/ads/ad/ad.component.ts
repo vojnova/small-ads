@@ -8,6 +8,7 @@ import {Question} from '../../models/Question';
 import {FormControl, Validators} from '@angular/forms';
 import * as firebase from 'firebase';
 import {NzMessageService} from 'ng-zorro-antd';
+import {FirestoreService} from '../../firestore/firestore.service';
 
 @Component({
   selector: 'app-ad',
@@ -16,32 +17,48 @@ import {NzMessageService} from 'ng-zorro-antd';
 })
 export class AdComponent implements OnInit {
   @Input() ad: Ad;
-  public owner: User;
-  public questions: Question[] = [];
+  public owner: User | any;
+  public questions;
   public askInput = new FormControl('');
 
-  constructor(private firestore: AngularFirestore, public authService: AuthService,
+  constructor(private firestore: FirestoreService, public authService: AuthService,
               private router: Router, private message: NzMessageService) {  }
 
   ngOnInit(): void {
     if (this.ad.owner){
-      this.firestore.doc<User>('users/' + this.ad.owner).valueChanges()
-        .subscribe(data => this.owner = data);
+      // this.firestore.doc<User>('users/' + this.ad.owner).valueChanges()
+      //   .subscribe(data => this.owner = data);
+      this.firestore.getUserById(this.ad.owner).subscribe(data => {
+        this.owner = data;
+      });
     }
-    if (this.ad.questions){
-      for (const question of this.ad.questions){
-        this.firestore.doc<Question>('questions/' + question).valueChanges()
-          .subscribe(data => {
-            this.firestore.doc<User>('users/' + data.from).valueChanges().subscribe(user => {
-              this.questions.push({...data, from: user});
-            });
-          });
-      }
-    }
+    // if (this.ad.questions){
+    //   for (const questionId of this.ad.questions){
+    //     this.firestore.getQuestionById(questionId)
+    //       .subscribe(question => {
+    //         if (question) {
+    //           this.firestore.getUserById(question.from).subscribe(user => {
+    //             // @ts-ignore
+    //             this.questions.push({...question, id: questionId, from: user});
+    //           });
+    //         }
+    //       });
+    //   }
+    // }
+    this.firestore.getQuestionsForAd(this.ad.id)
+      .then(data => {
+        const array = [];
+        data.forEach(doc => {
+          const id = doc.id;
+          const question = doc.data();
+          array.push({...question, id});
+        });
+        this.questions = array;
+      });
   }
 
   delete() {
-    this.firestore.doc('ads/' + this.ad.id).delete()
+    this.firestore.deleteAd(this.ad.id)
       .then(data => {
         this.message.success('Обявата беше изтрита!');
         this.router.navigateByUrl('/ads');
@@ -59,17 +76,12 @@ export class AdComponent implements OnInit {
     const date = Date.now();
     const ad = this.ad.id;
     if (content) {
-      this.firestore.collection('questions').add({content, from, date, ad})
+      this.firestore.addQuestion({content, from, date, ad})
         .catch(error => {
           this.message.remove(messageId);
           this.message.error('Въпросът не можа да се добави!');
         })
         .then(question => {
-          // @ts-ignore
-          const id = question.id;
-          this.firestore.doc('ads/' + this.ad.id).update({
-            questions: firebase.firestore.FieldValue.arrayUnion(id)
-          });
           this.message.remove(messageId);
           this.message.success('Въпросът е добавен успешно!');
           this.router.navigateByUrl('/ads');

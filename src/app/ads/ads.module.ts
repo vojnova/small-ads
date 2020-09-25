@@ -7,6 +7,7 @@ import { CreateAdComponent } from './create-ad/create-ad.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AntDesignModule} from '../ant-design/ant-design.module';
 import {UserGuard} from '../auth/user.guard';
+import { QuestionComponent } from './question/question.component';
 
 const routes = [
   {path: '', component: AdsListPageComponent},
@@ -15,7 +16,7 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [AdsListPageComponent, AdComponent, CreateAdComponent],
+  declarations: [AdsListPageComponent, AdComponent, CreateAdComponent, QuestionComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

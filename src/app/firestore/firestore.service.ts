@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {User} from '../models/User';
 import {Ad} from '../models/Ad';
-import {Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {Question} from '../models/Question';
+import {pipe} from 'rxjs';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -15,41 +18,76 @@ export class FirestoreService {
   public ads$;
 
   constructor(private firestore: AngularFirestore) {
-    this.updateUsers();
-    this.updateAds();
-  }
-
-  updateUsers() {
-    this.firestore.collection<User>('users').snapshotChanges().subscribe(data => {
-      this.users = [];
-      for (const doc of data){
-        const id = doc.payload.doc.id;
-        const user = doc.payload.doc.data();
-        this.users.push({id, ...user});
-      }
-      // this.users$.next(this.users);
-      console.log('new data users');
-    });
-  }
-
-  updateAds() {
-    this.firestore.collection<Ad>('ads').snapshotChanges().subscribe(data => {
-      this.ads = [];
-      for (const doc of data){
-        const id = doc.payload.doc.id;
-        const ad = doc.payload.doc.data();
-        this.ads.push({...ad, id});
-      }
-      // this.ads$.next(this.ads);
-      console.log('new data ads');
-    });
+    this.users$ = this.firestore.collection<User>('users').valueChanges({idField: 'id'});
+    this.ads$ = this.firestore.collection<Ad>('ads').valueChanges({idField: 'id'});
   }
 
   getUsers() {
-    return of(this.users);
+    return this.users$;
   }
 
   getAds() {
-    return of(this.ads);
+    return this.ads$;
+  }
+
+  getUserById(id) {
+    return this.firestore.doc<User>('users/' + id).get()
+      .pipe(map(doc => doc.data()));
+  }
+
+  getAdById(id) {
+    return this.firestore.doc<Ad>('ads/' + id).get()
+      .pipe(map(doc => doc.data()));
+
+    // return this.firestore.doc<Ad>('ads/' + id).snapshotChanges()
+    //   .pipe(map(doc => {
+    //     const data = doc.payload.data();
+    //     const ownerId = data.owner;
+    //     const owner = this.getUserById(ownerId);
+    //     const questions = data.questions;
+    //     return {...data, owner};
+    //   }));
+    //
+    // const docRef = this.firestore.collection<Ad>('ads').doc(id);
+    // return docRef.get().pipe(map(doc => {
+    //   if (doc.exists) {
+    //     const ad = doc.data();
+    //     const ownerId = ad.owner;
+    //     console.log('doc exists');
+    //     return this.firestore.doc('users/' + ownerId).get().pipe(map(user => {
+    //       console.log('owner pipe');
+    //       const owner = user.data();
+    //       console.log({...ad, owner});
+    //       return {...ad, owner};
+    //     }));
+    //   }
+    // }));
+  }
+
+  getQuestionById(id) {
+    return this.firestore.doc<Question>('questions/' + id).get()
+      .pipe(map(doc => doc.data()));
+  }
+
+  deleteAd(id) {
+    return this.firestore.doc('ads/' + id).delete();
+  }
+
+  async addQuestion(question: Question) {
+    const q = await this.firestore.collection('questions').add(question);
+    const id = q.id;
+    console.log('id' + id);
+    await this.firestore.doc('ads/' + question.ad).update({
+      questions: firebase.firestore.FieldValue.arrayUnion(id)
+    });
+  }
+
+  getQuestionsForAd(adId) {
+    return this.firestore.collection<Question>('questions').ref
+      .where('ad', '==', adId).get();
+  }
+
+  deleteQuestion(id) {
+    return this.firestore.doc('questions/' + id).delete();
   }
 }

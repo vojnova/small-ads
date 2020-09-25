@@ -2,9 +2,10 @@ import {User} from './User';
 import {Ad} from './Ad';
 
 export interface Question {
+  id?: string;
   content: string;
-  date: string;
+  date: string | number;
   from: string | User;
-  ad: Ad;
-  answer: string;
+  ad: string;
+  answer?: string;
 }

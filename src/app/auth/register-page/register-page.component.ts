@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {AuthService} from '../auth.service';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-register-page',
@@ -15,8 +14,7 @@ export class RegisterPageComponent implements OnInit {
   public registerForm: FormGroup;
 
   constructor(private fb: FormBuilder, private firestore: AngularFirestore,
-              private router: Router, private fireauth: AngularFireAuth,
-              private authService: AuthService) {
+              private fireauth: AngularFireAuth, private message: NzMessageService) {
     this.registerForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
@@ -52,15 +50,16 @@ export class RegisterPageComponent implements OnInit {
       delete user.checkPassword;
       this.fireauth.createUserWithEmailAndPassword(user.email, user.password)
         .catch(error => {
-          console.log(error.code + error.message);
-          this.router.navigateByUrl('auth/register');
+          this.message.error(error.message);
         })
         .then(res => {
-          // @ts-ignore
-          const id = res.user.uid;
-          delete user.password;
-          this.firestore.collection('users').doc(id).set(user);
-          // this.authService.login(id);
+          if (res) {
+            const id = res.user.uid;
+            delete user.password;
+            this.firestore.collection('users').doc(id).set(user)
+              .catch(error => this.message.error(error.message))
+              .then(data => this.message.success('Успешна регистрация!'));
+          }
         });
     }
   }

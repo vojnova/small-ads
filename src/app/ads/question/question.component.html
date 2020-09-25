@@ -1,0 +1,11 @@
+<nz-comment *ngIf="question" nzAuthor="{{question.from.name}}">
+  <nz-comment-content>
+    <p>{{ question.content }}</p>
+  </nz-comment-content>
+  <nz-comment-action>Отговор</nz-comment-action>
+  <nz-comment-action><span (click)="delete()">Изтрий</span></nz-comment-action>
+  <nz-comment-action><span (click)="edit()">Редактирай</span></nz-comment-action>
+  <nz-comment *ngIf="question.answer">
+    {{question.answer}}
+  </nz-comment>
+</nz-comment>
