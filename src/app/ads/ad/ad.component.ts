@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Ad} from '../../models/Ad';
 import {User} from '../../models/User';
 import {AuthService} from '../../auth/auth.service';
@@ -17,6 +17,8 @@ export class AdComponent implements OnInit {
   public owner: User | any;
   public questions;
   public askInput = new FormControl('');
+  public tabIndex;
+  @ViewChild('addQuestion') input;
 
   constructor(private firestore: FirestoreService, public authService: AuthService,
               private router: Router, private message: NzMessageService) {  }
@@ -43,7 +45,7 @@ export class AdComponent implements OnInit {
     this.firestore.deleteAd(this.ad.id)
       .then(data => {
         this.message.success('Обявата беше изтрита!');
-        this.router.navigateByUrl('/ads');
+        this.ad = null;
       });
   }
 
@@ -52,13 +54,19 @@ export class AdComponent implements OnInit {
   }
 
   ask() {
-    const messageId = this.message.loading('Обработва се...').messageId;
+    if (this.tabIndex !== 1) {
+      this.tabIndex = 1;
+      const input = this.input;
+      setTimeout(func => { input.nativeElement.focus(); }, 300);
+      return;
+    }
     const content = this.askInput.value;
+    if (content) {
+    const messageId = this.message.loading('Обработва се...').messageId;
     const from = this.authService.currentUserId;
     const date = Date.now();
     const ad = this.ad.id;
-    if (content) {
-      this.firestore.addQuestion({content, from, date, ad})
+    this.firestore.addQuestion({content, from, date, ad})
         .catch(error => {
           this.message.remove(messageId);
           this.message.error('Въпросът не можа да се добави!');
@@ -68,7 +76,7 @@ export class AdComponent implements OnInit {
           this.message.success('Въпросът е добавен успешно!');
           this.router.navigateByUrl('/ads');
         });
-      this.askInput.setValue('');
+    this.askInput.setValue('');
     }
     else {
       this.message.warning('Не може да оставите полето празно!');

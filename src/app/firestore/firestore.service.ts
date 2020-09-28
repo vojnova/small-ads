@@ -20,7 +20,7 @@ export class FirestoreService {
     this.users$ = this.firestore.collection<User>('users')
       .valueChanges({idField: 'id'});
     this.ads$ = this.firestore.collection<Ad>('ads',
-        ref => ref.orderBy('date'))
+        ref => ref.orderBy('date', 'desc'))
       .valueChanges({idField: 'id'});
   }
 
@@ -34,7 +34,8 @@ export class FirestoreService {
 
   getAdsByUsedId(userId) {
     return this.firestore.collection<Ad>('ads',
-        ref => ref.where('owner', '==', userId))
+        ref => ref.where('owner', '==', userId)
+          .orderBy('date', 'desc'))
       .valueChanges({idField: 'id'});
   }
 
@@ -97,5 +98,10 @@ export class FirestoreService {
 
   deleteQuestion(id) {
     return this.firestore.doc('questions/' + id).delete();
+  }
+
+  editQuestion(id, content) {
+    // const date = Date.now();
+    return this.firestore.doc('questions/' + id).update({content});
   }
 }

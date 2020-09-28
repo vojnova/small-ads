@@ -2,11 +2,15 @@
             nzAuthor="{{owner.name}}"
             nzDatetime="{{question.date | date}}">
   <nz-comment-content>
-    <p>{{ question.content }}</p>
+    <p *ngIf="!editing">{{ question.content }}</p>
+    <p *ngIf="editing">
+      <input #input nz-input type="text" value="{{question.content}}" style="width: auto">
+      <button (click)="edit()">Запази</button>
+    </p>
   </nz-comment-content>
   <nz-comment-action *ngIf="auth.currentUserId != question.from">Отговор</nz-comment-action>
   <nz-comment-action *ngIf="auth.currentUserId == question.from"><span (click)="delete()">Изтрий</span></nz-comment-action>
-  <nz-comment-action *ngIf="auth.currentUserId == question.from"><span (click)="edit()">Редактирай</span></nz-comment-action>
+  <nz-comment-action *ngIf="auth.currentUserId == question.from"><span (click)="onEdit()">Редактирай</span></nz-comment-action>
   <nz-comment *ngIf="question.answer">
     {{question.answer}}
   </nz-comment>

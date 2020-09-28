@@ -1,9 +1,9 @@
-<nz-card [nzActions]="authService.currentUser ?
+<nz-card *ngIf="ad" [nzActions]="authService.currentUser ?
 (authService.currentUserId == ad.owner || authService.currentUser.isAdmin ?
 [actionAsk, actionEdit, actionDelete] : [actionAsk]) : []"
          nzHoverable="true">
   <nz-card-tab>
-    <nz-tabset>
+    <nz-tabset [(nzSelectedIndex)]="tabIndex">
       <nz-tab nzTitle="Описание">
         <h3>{{ad.title}}</h3>
         <p>{{ad.description}}</p>
@@ -15,12 +15,12 @@
         <p align="right">{{ad.date | date:'longDate'}}</p>
       </nz-tab>
 
-      <nz-tab nzTitle="Въпроси">
+      <nz-tab nzTitle="Въпроси" #toggle>
         <div *ngIf="questions">
           <app-question *ngFor="let question of questions; trackBy: trackByFn" [question]="question"></app-question>
         </div>
         <div *ngIf="!questions || !questions.length">Няма въпроси.</div>
-        <input *ngIf="authService.currentUser" type="text" [formControl]="askInput" nz-input placeholder="Напишете въпрос...">
+        <input #addQuestion *ngIf="authService.currentUser" type="text" [formControl]="askInput" nz-input placeholder="Напишете въпрос...">
       </nz-tab>
     </nz-tabset>
   </nz-card-tab>
