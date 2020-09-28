@@ -4,7 +4,6 @@ import {User} from '../models/User';
 import {Ad} from '../models/Ad';
 import {map} from 'rxjs/operators';
 import {Question} from '../models/Question';
-import {pipe} from 'rxjs';
 import * as firebase from 'firebase';
 
 @Injectable({
@@ -18,8 +17,11 @@ export class FirestoreService {
   public ads$;
 
   constructor(private firestore: AngularFirestore) {
-    this.users$ = this.firestore.collection<User>('users').valueChanges({idField: 'id'});
-    this.ads$ = this.firestore.collection<Ad>('ads').valueChanges({idField: 'id'});
+    this.users$ = this.firestore.collection<User>('users')
+      .valueChanges({idField: 'id'});
+    this.ads$ = this.firestore.collection<Ad>('ads',
+        ref => ref.orderBy('date'))
+      .valueChanges({idField: 'id'});
   }
 
   getUsers() {
@@ -28,6 +30,12 @@ export class FirestoreService {
 
   getAds() {
     return this.ads$;
+  }
+
+  getAdsByUsedId(userId) {
+    return this.firestore.collection<Ad>('ads',
+        ref => ref.where('owner', '==', userId))
+      .valueChanges({idField: 'id'});
   }
 
   getUserById(id) {

@@ -1,10 +1,12 @@
-<nz-comment *ngIf="question" nzAuthor="{{question.from.name}}">
+<nz-comment *ngIf="question && owner"
+            nzAuthor="{{owner.name}}"
+            nzDatetime="{{question.date | date}}">
   <nz-comment-content>
     <p>{{ question.content }}</p>
   </nz-comment-content>
-  <nz-comment-action>Отговор</nz-comment-action>
-  <nz-comment-action><span (click)="delete()">Изтрий</span></nz-comment-action>
-  <nz-comment-action><span (click)="edit()">Редактирай</span></nz-comment-action>
+  <nz-comment-action *ngIf="auth.currentUserId != question.from">Отговор</nz-comment-action>
+  <nz-comment-action *ngIf="auth.currentUserId == question.from"><span (click)="delete()">Изтрий</span></nz-comment-action>
+  <nz-comment-action *ngIf="auth.currentUserId == question.from"><span (click)="edit()">Редактирай</span></nz-comment-action>
   <nz-comment *ngIf="question.answer">
     {{question.answer}}
   </nz-comment>

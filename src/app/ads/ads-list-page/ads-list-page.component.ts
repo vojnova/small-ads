@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Ad} from '../../models/Ad';
 import {FirestoreService} from '../../firestore/firestore.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-ads-list-page',
@@ -10,17 +11,22 @@ import {FirestoreService} from '../../firestore/firestore.service';
   styleUrls: ['./ads-list-page.component.scss']
 })
 export class AdsListPageComponent implements OnInit {
-  ads: Ad[];
+  ads: Ad[] = [];
 
-  constructor(private firestore: AngularFirestore) {
-    this.firestore.collection<Ad>('ads').snapshotChanges().subscribe(data => {
-      this.ads = [];
-      for (const doc of data){
-        const id = doc.payload.doc.id;
-        const ad = doc.payload.doc.data();
-        this.ads.push({...ad, id});
+  constructor(private firestore: FirestoreService, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.paramMap.subscribe(params => {
+      if (params.has('userId') && params.get('userId')) {
+        this.firestore.getAdsByUsedId(params.get('userId'))
+          .subscribe(data => this.ads = data);
+      }
+      else {
+        this.firestore.getAds().subscribe(data => this.ads = data);
       }
     });
+  }
+
+  trackByFn(index, element) {
+    return element.id;
   }
 
   ngOnInit(): void {

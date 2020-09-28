@@ -3,6 +3,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {NzMessageService} from 'ng-zorro-antd';
+import {ActivatedRoute} from '@angular/router';
+import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -12,17 +14,36 @@ import {NzMessageService} from 'ng-zorro-antd';
 export class RegisterPageComponent implements OnInit {
 
   public registerForm: FormGroup;
+  public isEditing = false;
 
   constructor(private fb: FormBuilder, private firestore: AngularFirestore,
-              private fireauth: AngularFireAuth, private message: NzMessageService) {
-    this.registerForm = fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', Validators.required],
-      city: '',
-      phone: '',
-      password: ['', Validators.required],
-      checkPassword: ['', [Validators.required, this.confirmationValidator]],
-      isAdmin: false
+              private fireauth: AngularFireAuth, private message: NzMessageService,
+              private activatedRoute: ActivatedRoute, private auth: AuthService) {
+    this.activatedRoute.paramMap.subscribe(params => {
+      if (params.has('edit')) {
+        this.isEditing = true;
+        this.registerForm = fb.group({
+          email: [auth.currentUser.email, [Validators.required, Validators.email]],
+          name: [auth.currentUser.name, Validators.required],
+          city: auth.currentUser.city,
+          phone: auth.currentUser.phone,
+          password: ['', Validators.required],
+          checkPassword: ['', [Validators.required, this.confirmationValidator]],
+          isAdmin: auth.currentUser.isAdmin
+        });
+      }
+      else {
+        this.isEditing = false;
+        this.registerForm = fb.group({
+          email: ['', [Validators.required, Validators.email]],
+          name: ['', Validators.required],
+          city: '',
+          phone: '',
+          password: ['', Validators.required],
+          checkPassword: ['', [Validators.required, this.confirmationValidator]],
+          isAdmin: false
+        });
+      }
     });
   }
 

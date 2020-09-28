@@ -12,7 +12,8 @@ import { QuestionComponent } from './question/question.component';
 const routes = [
   {path: '', component: AdsListPageComponent},
   {path: 'create', component: CreateAdComponent, canActivate: [UserGuard]},
-  {path: ':id', component: CreateAdComponent, canActivate: [UserGuard]}
+  {path: 'edit/:id', component: CreateAdComponent, canActivate: [UserGuard]},
+  {path: ':userId', component: AdsListPageComponent, canActivate: [UserGuard]}
 ];
 
 @NgModule({

@@ -1,15 +1,15 @@
 <form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submit()">
   <nz-form-item>
-    <nz-form-control nzErrorTip="Please enter your email!">
+    <nz-form-control nzErrorTip="Моля, въведете електронна поща!">
       <nz-input-group nzPrefixIcon="user">
         <input type="text" nz-input formControlName="email" placeholder="Email" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-control nzErrorTip="Please enter your password!">
+    <nz-form-control nzErrorTip="Моля, въведете парола!">
       <nz-input-group nzPrefixIcon="lock">
-        <input type="password" nz-input formControlName="password" placeholder="Password" />
+        <input type="password" nz-input formControlName="password" placeholder="Парола" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
@@ -23,6 +23,6 @@
 <!--      <a class="login-form-forgot">Forgot password</a>-->
 <!--    </div>-->
 <!--  </div>-->
-  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
-  Or <a routerLink="/auth/register"> register now! </a>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Вход</button>
+  Нямате профил? <a routerLink="/auth/register"> Регистрация </a>
 </form>

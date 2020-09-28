@@ -1,5 +1,4 @@
-<nz-card> <!--[nzActions]="[showPhone, actionEdit, actionDelete]"-->
-
+<nz-card [nzActions]="[actionShowAds]" class="users-list">
   <nz-card-meta
     nzTitle="{{user.name}}"
     nzDescription="{{user.email}}"
@@ -12,7 +11,9 @@
   </nz-card-meta>
 </nz-card>
 
-<ng-template [ngIf]="authService.currentUser">
+  <ng-template #actionShowAds>
+    <div routerLink="/ads/{{user.id}}">Покажи обявите на потребителя</div>
+  </ng-template>
 <ng-template #showPhone>
   <i nz-icon nzType="setting"></i>
 </ng-template>
@@ -21,5 +22,4 @@
 </ng-template>
 <ng-template #actionDelete>
   <i nz-icon nzType="delete"></i>
-</ng-template>
 </ng-template>

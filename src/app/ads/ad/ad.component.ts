@@ -1,12 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Ad} from '../../models/Ad';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {User} from '../../models/User';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
-import {Question} from '../../models/Question';
 import {FormControl, Validators} from '@angular/forms';
-import * as firebase from 'firebase';
 import {NzMessageService} from 'ng-zorro-antd';
 import {FirestoreService} from '../../firestore/firestore.service';
 
@@ -26,25 +23,10 @@ export class AdComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.ad.owner){
-      // this.firestore.doc<User>('users/' + this.ad.owner).valueChanges()
-      //   .subscribe(data => this.owner = data);
       this.firestore.getUserById(this.ad.owner).subscribe(data => {
         this.owner = data;
       });
     }
-    // if (this.ad.questions){
-    //   for (const questionId of this.ad.questions){
-    //     this.firestore.getQuestionById(questionId)
-    //       .subscribe(question => {
-    //         if (question) {
-    //           this.firestore.getUserById(question.from).subscribe(user => {
-    //             // @ts-ignore
-    //             this.questions.push({...question, id: questionId, from: user});
-    //           });
-    //         }
-    //       });
-    //   }
-    // }
     this.firestore.getQuestionsForAd(this.ad.id)
       .then(data => {
         const array = [];
@@ -66,7 +48,7 @@ export class AdComponent implements OnInit {
   }
 
   edit() {
-    this.router.navigateByUrl('ads/' + this.ad.id);
+    this.router.navigateByUrl('ads/edit/' + this.ad.id);
   }
 
   ask() {
@@ -91,5 +73,9 @@ export class AdComponent implements OnInit {
     else {
       this.message.warning('Не може да оставите полето празно!');
     }
+  }
+
+  trackByFn(index, element) {
+    return element.id;
   }
 }

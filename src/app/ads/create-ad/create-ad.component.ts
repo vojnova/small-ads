@@ -45,7 +45,7 @@ export class CreateAdComponent implements OnInit {
             price: 0,
             date: Date.now(),
             active: true,
-            owner: authService.currentUser.id
+            owner: authService.currentUserId
           }
         );
       }

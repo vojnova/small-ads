@@ -1,3 +1,4 @@
 <div class="flex-wrap">
-<app-ad *ngFor="let ad of ads" [ad]="ad"></app-ad>
+  <p *ngIf="ads.length == 0">Няма активни обяви.</p>
+<app-ad *ngFor="let ad of ads; trackBy: trackByFn" [ad]="ad"></app-ad>
 </div>
